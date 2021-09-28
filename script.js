@@ -73,7 +73,7 @@ function logClick(event) {
                 document.getElementById("image-group").removeEventListener("click", logClick);
                 
                 // Remove images
-                document.getElementById("image-group").innerHTML = '';
+                document.getElementById("image-group").innerHTML = "";
                 
                 // Show results button
                 let buttonEl = document.createElement("button");
@@ -94,12 +94,15 @@ function logClick(event) {
 // Displays the results of each product on the webpage.
 function showResults () {
 
+    document.getElementById("image-group").innerText = ""; // Remove the button.
+    
     // Show results for each product. "X had 3 votes, and was seen Y times."
     for (let i = 0; i < Product.productList.length; i++) {
         let textEl = document.createElement("p");
         textEl.innerText = `${Product.productList[i].name} had ${Product.productList[i].countClicked}, and was seen ${Product.productList[i].countDisplayed} times.`
         document.getElementById("image-group").appendChild(textEl);
     }
+
 }
 
 // Product images.
