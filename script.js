@@ -1,25 +1,8 @@
 'use strict';
 
-const files = ['bag.jpg',
-'banana.jpg',
-'bathroom.jpg',
-'boots.jpg',
-'breakfast.jpg',
-'bubblegum.jpg',
-'chair.jpg',
-'cthulhu.jpg',
-'dog-duck.jpg',
-'dragon.jpg',
-'pen.jpg',
-'pet-sweep.jpg',
-'scissors.jpg',
-'shark.jpg',
-'sweep.png',
-'tauntaun.jpg',
-'unicorn.jpg',
-'water-can.jpg',
-'wine-glass.jpg']
-
+// Constructor for product objects.
+// Product objects are stored in Product.productList.
+// Product names are same as file name without extension.
 function Product(filename) {
     this.name = filename.split(".")[0];
     this.path = `assets/${filename}`;
@@ -30,7 +13,7 @@ function Product(filename) {
 }
 Product.productList = [];
 
-// Function to display image
+// Displays on webpage the image of the passed in object.
 function displayImage(productObject) {
     let imageElement = document.createElement("img");
     imageElement.src = productObject.path;
@@ -41,7 +24,7 @@ function displayImage(productObject) {
     productObject.countDisplayed = 1 + productObject.countDisplayed;
 }
 
-// Display new image set
+// Displays a new image set.
 function displayNRandomImages() {
     let alreadyDisplayed = [];
     let randomIndex;
@@ -66,9 +49,8 @@ function displayNRandomImages() {
 
 }
 
-
-// Function to log click and increment values.
-// Refresh images after logging.
+// Keeps track of which product was clicked and how many comparisons were made.
+// Afterwards, show new image set or show results button depending on whether there are comparisons left to be made.
 function logClick(event) {
 
     // Increment the number of times a product has been clicked, then show next set of images if applicable.
@@ -84,11 +66,23 @@ function logClick(event) {
             Product.productList[i].countClicked = 1 + Product.productList[i].countClicked;
 
             // Show next set of images if user has comparisons left.
-            // Else remove event listener from images.
             if (comparisonsMade < comparisonsToMake) {
                 displayNRandomImages();
             } else {
+                // Remove event listener.
                 document.getElementById("image-group").removeEventListener("click", logClick);
+                
+                // Remove images
+                document.getElementById("image-group").innerHTML = '';
+                
+                // Show results button
+                let buttonEl = document.createElement("button");
+                buttonEl.innerText = "View Results";
+                buttonEl.id = "button-id"
+                document.getElementById("image-group").appendChild(buttonEl);
+                
+                // Show results when button is clicked.
+                document.getElementById("button-id").addEventListener("click", showResults);
             }
 
             break;
@@ -97,24 +91,53 @@ function logClick(event) {
 
 }
 
-// Set how many times user is asked to make a comparison..
-const comparisonsToMake = 1;
+// Displays the results of each product on the webpage.
+function showResults () {
 
-// Set how many images are shown per set.
+    // Show results for each product. "X had 3 votes, and was seen Y times."
+    for (let i = 0; i < Product.productList.length; i++) {
+        let textEl = document.createElement("p");
+        textEl.innerText = `${Product.productList[i].name} had ${Product.productList[i].countClicked}, and was seen ${Product.productList[i].countDisplayed} times.`
+        document.getElementById("image-group").appendChild(textEl);
+    }
+}
+
+// Product images.
+const files = ['bag.jpg',
+'banana.jpg',
+'bathroom.jpg',
+'boots.jpg',
+'breakfast.jpg',
+'bubblegum.jpg',
+'chair.jpg',
+'cthulhu.jpg',
+'dog-duck.jpg',
+'dragon.jpg',
+'pen.jpg',
+'pet-sweep.jpg',
+'scissors.jpg',
+'shark.jpg',
+'sweep.png',
+'tauntaun.jpg',
+'unicorn.jpg',
+'water-can.jpg',
+'wine-glass.jpg']
+
+// Configurable defaults.
+const comparisonsToMake = 25;
 const numberOfImagesToShow = 3;
 
 let comparisonsMade = 0;
 
 // Create a product object for each image file.
-// Product objects are stored in Product.productList.
 for (let file of files) {
     new Product(file);
 }
 
-// Display n random images upon page load.
+// Display first image set on page load.
 displayNRandomImages(numberOfImagesToShow);
 
-// Keep track of which image was clicked and load next set if applicable.
+// Wait for user to click an image.
 document.getElementById("image-group").addEventListener("click", logClick)
 
 
