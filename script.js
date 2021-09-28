@@ -29,15 +29,31 @@ function displayNRandomImages() {
     let alreadyDisplayed = [];
     let randomIndex;
 
+    // Add products (specifically their indices in Products.productsList) currently shown on page to alreadyDisplayed list.
+    let imageGroupEl = document.getElementById("image-group");
+    for (let i = 0; i < imageGroupEl.childNodes.length; i++) {
+
+        // What index in productList is this product ("id") found? That's what the loop on the line after is for.
+        let idToLookup = imageGroupEl.childNodes[i].id
+        for (let j = 0; j < Product.productList.length; j++) {
+
+            // Product on page was found in productList at index j. Add j to alreadyDisplayed list.
+            if (idToLookup == Product.productList[j].name) { 
+                alreadyDisplayed.push(j);
+                break;
+            }
+        }
+    }
+
     // Remove existing images
-    document.getElementById("image-group").innerHTML = '';
+    imageGroupEl.innerHTML = '';
 
     // Display n random images
     for (let i = 0; i < numberOfImagesToShow; i++) {
 
         // Pick a random index to show. Prevent duplicates.
         do {
-            randomIndex = Math.floor(Math.random() * Product.productList.length); 
+            randomIndex = Math.floor(Math.random() * Product.productList.length);
         } while (alreadyDisplayed.includes(randomIndex));
 
         // Keep track of which indices (image objects) have already been selected.
@@ -53,7 +69,7 @@ function displayNRandomImages() {
 // Afterwards, show new image set or show results button depending on whether there are comparisons left to be made.
 function logClick(event) {
 
-    // Increment the number of times a product has been clicked, then show next set of images if applicable.
+    // Find the product that was clicked on in productList, increment the number of times a product has been clicked, increment number of times the user has made a comparison, then show next set of images if applicable.
     for (let i = 0; Product.productList.length; i++) {
 
         // If name of element clicked is same as name of object
@@ -68,6 +84,7 @@ function logClick(event) {
             // Show next set of images if user has comparisons left.
             if (comparisonsMade < comparisonsToMake) {
                 displayNRandomImages();
+
             } else {
                 // Remove event listener.
                 document.getElementById("image-group").removeEventListener("click", logClick);
