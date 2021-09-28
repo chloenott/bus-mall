@@ -38,37 +38,30 @@ function displayImage(productObject) {
     document.getElementById("image-group").appendChild(imageElement);
 
     // Keep track of how many times an image has been displayed.
-    // Note that user may not click any image; the display count will still increment.
     productObject.countDisplayed = 1 + productObject.countDisplayed;
 }
 
 // Display new image set
 function displayNRandomImages() {
     let alreadyDisplayed = [];
-    
-    // Only show new image set if user has comparisons left to be asked.
-    if (comparisonsAsked < comparisonsToAsk) {
+    let randomIndex;
 
-        comparisonsAsked++;
-        let randomIndex;
+    // Remove existing images
+    document.getElementById("image-group").innerHTML = '';
 
-        // Remove existing images
-        document.getElementById("image-group").innerHTML = '';
+    // Display n random images
+    for (let i = 0; i < numberOfImagesToShow; i++) {
 
-        // Display n random images
-        for (let i = 0; i < numberOfImagesToShow; i++) {
+        // Pick a random index to show. Prevent duplicates.
+        do {
+            randomIndex = Math.floor(Math.random() * Product.productList.length); 
+        } while (alreadyDisplayed.includes(randomIndex));
 
-            // Pick a random index to show. Prevent duplicates.
-            do {
-                randomIndex = Math.floor(Math.random() * Product.productList.length); 
-            } while (alreadyDisplayed.includes(randomIndex));
+        // Keep track of which indices (image objects) have already been selected.
+        alreadyDisplayed.push(randomIndex);
 
-            // Keep track of which indices (image objects) have already been selected.
-            alreadyDisplayed.push(randomIndex);
-
-            // Show the product at the random index.
-            displayImage(Product.productList[randomIndex]);
-        }
+        // Show the product at the random index.
+        displayImage(Product.productList[randomIndex]);
     }
 
 }
@@ -78,21 +71,36 @@ function displayNRandomImages() {
 // Refresh images after logging.
 function logClick(event) {
 
-    // Get product object from the selected image's id and increment the number of times it's been clicked.
+    // Increment the number of times a product has been clicked, then show next set of images if applicable.
     for (let i = 0; Product.productList.length; i++) {
-        if (event.target.id == Product.productList[i].name) {
+
+        // If name of element clicked is same as name of object
+        // Only log click if user has comparisons left.
+        if (event.target.id == Product.productList[i].name && comparisonsMade < comparisonsToMake) {
+
+            // Increment how many image sets the user has compared.
+            comparisonsMade++;
+
+            // Increment how many times a product has been clicked.
             Product.productList[i].countClicked = 1 + Product.productList[i].countClicked
-            displayNRandomImages(); // Show next image set.
+
+            // Show next set of images if user has comparisons left.
+            if (comparisonsMade < comparisonsToMake) {
+                displayNRandomImages();
+            }
             break;
         }
     }
 
 }
 
-// Set how many times user is asked to make a comparison
-const comparisonsToAsk = 25;
-let comparisonsAsked = 0;
+// Set how many times user is asked to make a comparison..
+const comparisonsToMake = 25;
+
+// Set how many images are shown per set.
 const numberOfImagesToShow = 3;
+
+let comparisonsMade = 0;
 
 // Create a product object for each image file.
 // Product objects are stored in Product.productList.
@@ -103,7 +111,7 @@ for (let file of files) {
 // Display n random images upon page load.
 displayNRandomImages(numberOfImagesToShow);
 
-// Log which image has been clicked and refresh images shown.
+// Keep track of which image was clicked and load next set if applicable.
 document.getElementById("image-group").addEventListener("click", logClick)
 
 
