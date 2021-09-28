@@ -75,19 +75,22 @@ function logClick(event) {
     for (let i = 0; Product.productList.length; i++) {
 
         // If name of element clicked is same as name of object
-        // Only log click if user has comparisons left.
-        if (event.target.id == Product.productList[i].name && comparisonsMade < comparisonsToMake) {
+        if (event.target.id == Product.productList[i].name) {
 
             // Increment how many image sets the user has compared.
             comparisonsMade++;
 
             // Increment how many times a product has been clicked.
-            Product.productList[i].countClicked = 1 + Product.productList[i].countClicked
+            Product.productList[i].countClicked = 1 + Product.productList[i].countClicked;
 
             // Show next set of images if user has comparisons left.
+            // Else remove event listener from images.
             if (comparisonsMade < comparisonsToMake) {
                 displayNRandomImages();
+            } else {
+                document.getElementById("image-group").removeEventListener("click", logClick);
             }
+
             break;
         }
     }
@@ -95,7 +98,7 @@ function logClick(event) {
 }
 
 // Set how many times user is asked to make a comparison..
-const comparisonsToMake = 25;
+const comparisonsToMake = 1;
 
 // Set how many images are shown per set.
 const numberOfImagesToShow = 3;
