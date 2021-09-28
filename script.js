@@ -95,7 +95,7 @@ function logClick(event) {
 function showResults () {
 
     document.getElementById("image-group").innerText = ""; // Remove the button.
-    
+
     // Show results for each product. "X had 3 votes, and was seen Y times."
     for (let i = 0; i < Product.productList.length; i++) {
         let textEl = document.createElement("p");
@@ -130,7 +130,7 @@ const files = ['bag.jpg',
 const comparisonsToMake = 25;
 const numberOfImagesToShow = 3;
 
-let comparisonsMade = 0;
+let comparisonsMade = 0
 
 // Create a product object for each image file.
 for (let file of files) {
