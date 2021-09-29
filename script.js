@@ -165,7 +165,8 @@ function showResults () {
         options: {
           scales: {
             y: {
-              beginAtZero: true
+              beginAtZero: true,
+              ticks: {stepSize: 1}
             }
           }
         },
