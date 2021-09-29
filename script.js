@@ -124,13 +124,13 @@ function createDataSet() {
     return {
         labels: dataset.productName,
         datasets: [{
-            label: 'Count Displayed',
-            data: dataset.countDisplayed,
-            backgroundColor: '#FC749C'
-        }, {
-            label: 'Count Clicked',
+            label: 'Voted',
             data: dataset.countClicked,
             backgroundColor: '#5BD7FC'
+            }, {
+            label: 'Shown',
+            data: dataset.countDisplayed,
+            backgroundColor: '#FC749C'
         }]
     };
 
@@ -163,13 +163,23 @@ function showResults () {
         type: 'bar',
         data: createDataSet(),
         options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {stepSize: 1}
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {stepSize: 1},
+                    title: {display: true, text: 'Count'},
+                    stacked: false
+                },
+                x: {
+                    ticks: {minRotation: 90, maxRotation: 90},
+                    stacked: false
+                }
+            },
+            interaction: {
+                intersect: false
             }
-          }
-        },
+        }
+        
     });
 
 };
@@ -196,7 +206,7 @@ const files = ['bag.jpg',
 'wine-glass.jpg'];
 
 // Configurable defaults.
-const comparisonsToMake = 5;
+const comparisonsToMake = 25;
 const numberOfImagesToShow = 3;
 
 let comparisonsMade = 0;
