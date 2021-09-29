@@ -3,6 +3,7 @@
 // Constructor for product objects.
 // Product objects are stored in Product.productList.
 // Product names are same as file name without extension.
+Product.productList = [];
 function Product(filename) {
     this.name = filename.split(".")[0];
     this.path = `assets/${filename}`;
@@ -11,7 +12,6 @@ function Product(filename) {
 
     Product.productList.push(this);
 };
-Product.productList = [];
 
 // Displays on webpage the image of the passed in object.
 function displayImage(productObject) {
@@ -80,6 +80,9 @@ function logClick(event) {
 
             // Increment how many times a product has been clicked.
             Product.productList[i].countClicked = 1 + Product.productList[i].countClicked;
+
+            // Save results to local storage by storing Product.productList as "productList". Will overwrite existing value.
+            localStorage.setItem("productList", JSON.stringify(Product.productList));
 
             // Show next set of images if user has comparisons left.
             if (comparisonsMade < comparisonsToMake) {
@@ -214,6 +217,12 @@ let comparisonsMade = 0;
 // Create a product object for each image file.
 for (let file of files) {
     new Product(file);
+}
+
+// Get any existing productList data from local storage if it exists.
+if (localStorage.getItem("productList")) {
+    console.log('hi')
+    Product.productList = JSON.parse(localStorage.getItem("productList"));
 }
 
 // Display first image set on page load.
