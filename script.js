@@ -221,7 +221,6 @@ for (let file of files) {
 
 // Get any existing productList data from local storage if it exists.
 if (localStorage.getItem("productList")) {
-    console.log('hi')
     Product.productList = JSON.parse(localStorage.getItem("productList"));
 }
 
