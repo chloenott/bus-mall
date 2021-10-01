@@ -1,2 +1,2 @@
 # bus-mall
-Code fellows 201 assignment
+Code fellows 201 assignment. The purpose of this site is to let the user choose the preferred product among x number (default 3) of choices randomly selected from a bank of products. It repeats this selection process y number of times. At the end the user can view their results in a graph that shows how many times they clicked on each product versus how many times each product was shown to them.
